@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>MiniDB Console</h2>
+
+<textarea id="sql" rows="5" cols="60"></textarea><br><br>
+<button onclick="run()">Execute</button>
+
+<pre id="out"></pre>
+
+<script>
+    function run() {
+      fetch('/db/execute', {
+        method: 'POST',
+        headers: {'Content-Type':'text/plain'},
+        body: document.getElementById('sql').value
+      })
+      .then(res => res.text())
+      .then(data => document.getElementById('out').innerText = data);
+    }
+</script>
+</body>
+</html>

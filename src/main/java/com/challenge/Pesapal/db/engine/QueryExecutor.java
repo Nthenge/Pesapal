@@ -3,6 +3,7 @@ package com.challenge.Pesapal.db.engine;
 import com.challenge.Pesapal.db.core.*;
 import com.challenge.Pesapal.db.sql.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,9 +39,40 @@ public class QueryExecutor {
                 return executeDelete((DeleteCommand) command);
             }
 
+            if (command instanceof JoinSelectCommand) {
+                return executeJoin((JoinSelectCommand) command);
+            }
+
 
             throw new RuntimeException("Unsupported command: " + command.getClass());
         }
+
+    private Object executeJoin(JoinSelectCommand command) {
+
+        Table left = database.getTable(command.getLeftTable());
+        Table right = database.getTable(command.getRightTable());
+
+        List<Row> result = new ArrayList<>();
+
+        for (Row l : left.getRows()) {
+            for (Row r : right.getRows()) {
+                if (l.get(command.getLeftColumn())
+                        .equals(r.get(command.getRightColumn()))) {
+
+                    Map<String, Object> joinedValues = new HashMap<>();
+                    joinedValues.putAll(l.getValues());
+                    joinedValues.putAll(r.getValues());
+
+                    Row joined = new Row(joinedValues);
+                    result.add(joined);
+                }
+            }
+        }
+        return result;
+    }
+
+
+
 
     private Object executeDelete(DeleteCommand command) {
 

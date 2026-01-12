@@ -29,6 +29,11 @@ public class SqlParser {
             return parseDelete(sql);
         }
 
+        if (sql.toUpperCase().contains(" JOIN ")) {
+            return parseJoin(sql);
+        }
+
+
 
         throw new RuntimeException("Unsupported SQL: " + sql);
     }
@@ -152,6 +157,25 @@ public class SqlParser {
         Object whereValue = parseValue(whereTokens[1].trim());
 
         return new DeleteCommand(tableName, whereColumn, whereValue);
+    }
+
+    private SqlCommand parseJoin(String sql) {
+
+        // SELECT * FROM orders JOIN users ON orders.user_id = users.id
+        String[] parts = sql.split("\\s+");
+
+        String leftTable = parts[3];
+        String rightTable = parts[5];
+
+        String onPart = sql.substring(sql.toUpperCase().indexOf("ON") + 2).trim();
+        String[] condition = onPart.split("=");
+
+        String leftColumn = condition[0].trim().split("\\.")[1];
+        String rightColumn = condition[1].trim().split("\\.")[1];
+
+        return new JoinSelectCommand(
+                leftTable, rightTable, leftColumn, rightColumn
+        );
     }
 
 
