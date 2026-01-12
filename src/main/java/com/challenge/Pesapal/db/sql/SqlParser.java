@@ -14,10 +14,10 @@ public class SqlParser {
     public SqlCommand parse(String sql) {
         sql = sql.trim();
 
-        if (sql.toUpperCase().startsWith("CREATE TABLE")) {
+        if (sql.toUpperCase().startsWith("CREATE")) {
             return parseCreateTable(sql);
         }
-        if (sql.toUpperCase().startsWith("INSERT INTO")) {
+        if (sql.toUpperCase().startsWith("INSERT")) {
             return parseInsert(sql);
         }
         if (sql.toUpperCase().startsWith("SELECT")) {
@@ -28,12 +28,9 @@ public class SqlParser {
         if (sql.toUpperCase().startsWith("DELETE")) {
             return parseDelete(sql);
         }
-
         if (sql.toUpperCase().contains(" JOIN ")) {
             return parseJoin(sql);
         }
-
-
 
         throw new RuntimeException("Unsupported SQL: " + sql);
     }

@@ -27,7 +27,7 @@ public class DbRepl {
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("exit")) {
-                System.out.println("Bye 👋");
+                System.out.println("Exited from Console");
                 break;
             }
 
