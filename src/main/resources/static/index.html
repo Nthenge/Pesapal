@@ -1,23 +1,308 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Pesapal RDBMS Challenge</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 30px;
+        }
+
+        .left-panel {
+            flex: 2;
+        }
+
+        .right-panel {
+            flex: 1;
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+            overflow-y: auto;
+            max-height: 800px;
+        }
+
+        header h1 {
+            margin-bottom: 5px;
+            color: #1f2937;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .author {
+            background: #f9fafb;
+            padding: 10px 15px;
+            border-left: 4px solid #2563eb;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .instructions h3 {
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+            color: #4b5563;
+        }
+
+        .console {
+            margin-top: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+        pre#message {
+            margin-top: 15px;
+            color: #047857;
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #f3f4f6;
+            font-weight: 600;
+        }
+
+        /* Scrollable README panel */
+        .right-panel h3 {
+            color: #1f2937;
+            margin-top: 0;
+        }
+
+        .right-panel p, .right-panel li {
+            color: #4b5563;
+            font-size: 14px;
+        }
+
+        .right-panel ul {
+            padding-left: 20px;
+        }
+    </style>
+
+</head>
 <body>
-<h2>PesaPal RDBMS Challenge</h2>
-<h2>Console</h2>
+<div class="container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+        <header>
+            <h1>Pesapal RDBMS Challenge</h1>
+            <p class="subtitle">Java custom-built relational database engine supporting SQL operations </p>
 
-<textarea id="sql" rows="5" cols="60"></textarea><br><br>
-<button onclick="run()">Run</button>
+            <div class="author">
+                <div><strong>Name: </strong> Abraham Nthenge Mutinda</div>
+                <div><strong>Email: </strong> abrahamnetsec@gmail.com</div>
+                <div><strong>Phone: </strong> +254 713 331 448</div>
+            </div>
+        </header>
 
-<pre id="out"></pre>
+        <section class="instructions">
+            <h3>Usage Notes</h3>
+            <ul>
+                <li>Use standard SQL commands</li>
+                <li><strong>Do not</strong> include a semicolon (<code>;</code>) at the end</li>
+                <li>Supports CRUD operations and basic <strong>JOIN</strong> queries</li>
+                <li>Supports THREE dataTypes <strong>TEXT, STRING, INT</strong> </li>
+            </ul>
+        </section>
+
+        <section class="console">
+            <textarea id="sql" placeholder="e.g. CREATE TABLE users (id INT PRIMARY KEY, name TEXT) or SELECT * FROM users"></textarea>
+            <button onclick="run()">Execute</button>
+        </section>
+
+        <pre id="message"></pre>
+        <div id="tableContainer"></div>
+    </div>
+
+    <!-- Right Panel (README) -->
+    <div class="right-panel">
+        <h3>README</h3>
+        <p><strong>Pesapal RDBMS Challenge</strong> is a lightweight web-based relational database engine built in Java. It allows users to execute SQL queries dynamically, visualize results, and practice CRUD operations.</p>
+
+        <h3>Features</h3>
+        <ul>
+            <li>Dynamic execution of SQL queries.</li>
+            <li>Automatic detection of table names from queries.</li>
+            <li>Displays query results in a tabular format.</li>
+            <li>Stores the last accessed table for convenience.</li>
+            <li>Supports CREATE, SELECT, INSERT, UPDATE, DELETE, and basic JOIN queries.</li>
+        </ul>
+
+        <h3>Technologies Used</h3>
+        <ul>
+            <li>Frontend: HTML, CSS, JavaScript</li>
+            <li>Backend: Java, Spring boot</li>
+            <li>Database: SQL</li>
+            <li>AJAX Fetch API for real-time query execution</li>
+        </ul>
+
+        <h3>Setup & Installation</h3>
+        <ul>
+            <li>Clone the repository: <code>git clone &lt;repo-url&gt;</code></li>
+            <li>Open it with IntelliJ: <code>IDEA</code></li>
+            <li>Run maven install for dependencies: <code>maven install</code></li>
+            <li>Open your browser at <code>http://localhost:8080/index.html</code></li>
+        </ul>
+
+        <h3>Usage</h3>
+        <ul>
+            <li>Type SQL commands in the input box on the left.</li>
+            <li>Click "Execute" to run the query.</li>
+            <li>Results will appear below the input box in a table.</li>
+            <li>Last accessed table is remembered for data-modifying commands.</li>
+        </ul>
+
+        <h3>Project Structure</h3>
+        <ul>
+            <li><code>Resources/</code>: Frontend files (HTML, CSS, JS)</li>
+            <li><code>Server (main/java/com.challenge.Pesapal)/ </code>: Backend server and DB engine code</li>
+        </ul>
+    </div>
+</div>
 
 <script>
+    let lastTable = null;
+
     function run() {
-      fetch('/db/execute', {
-        method: 'POST',
-        headers: {'Content-Type':'text/plain'},
-        body: document.getElementById('sql').value
-      })
-      .then(res => res.text())
-      .then(data => document.getElementById('out').innerText = data);
+        const sql = document.getElementById('sql').value.trim();
+
+        // Detect table name
+        lastTable = extractTableName(sql) || lastTable;
+
+        fetch('/db/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: sql
+        })
+        .then(res => res.text())
+        .then(text => {
+            document.getElementById('message').innerText = text;
+
+            // Auto-refresh after data-modifying commands
+            if (lastTable && modifiesData(sql)) {
+                refreshTable(lastTable);
+            } else {
+                tryRenderTable(text);
+            }
+        })
+        .catch(err => {
+            document.getElementById('message').innerText = 'Error: ' + err;
+        });
+    }
+
+    function refreshTable(tableName) {
+        fetch('/db/execute', {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: `SELECT * FROM ${tableName}`
+        })
+        .then(res => res.text())
+        .then(text => tryRenderTable(text));
+    }
+
+    function tryRenderTable(text) {
+        document.getElementById('tableContainer').innerHTML = '';
+
+        try {
+            const data = JSON.parse(text);
+            if (Array.isArray(data)) {
+                renderTable(data);
+            }
+        } catch {
+            // Not JSON → ignore
+        }
+    }
+
+    function modifiesData(sql) {
+        return /^(CREATE|INSERT|UPDATE|DELETE)/i.test(sql);
+    }
+
+    function extractTableName(sql) {
+        const match = sql.match(/FROM\s+(\w+)|INTO\s+(\w+)|TABLE\s+(\w+)|UPDATE\s+(\w+)/i);
+        return match ? match.slice(1).find(Boolean) : null;
+    }
+
+    function renderTable(rows) {
+        if (rows.length === 0) {
+            document.getElementById('message').innerText = '(Table is empty, execute commands to add data into it)';
+            return;
+        }
+
+        const table = document.createElement('table');
+        const headerRow = document.createElement('tr');
+
+        Object.keys(rows[0].values).forEach(col => {
+            const th = document.createElement('th');
+            th.innerText = col;
+            headerRow.appendChild(th);
+        });
+
+        table.appendChild(headerRow);
+
+        rows.forEach(row => {
+            const tr = document.createElement('tr');
+            Object.values(row.values).forEach(val => {
+                const td = document.createElement('td');
+                td.innerText = val;
+                tr.appendChild(td);
+            });
+            table.appendChild(tr);
+        });
+
+        document.getElementById('tableContainer').appendChild(table);
     }
 </script>
 </body>

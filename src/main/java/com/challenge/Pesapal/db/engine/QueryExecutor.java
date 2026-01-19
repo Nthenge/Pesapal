@@ -179,6 +179,13 @@ public class QueryExecutor {
                                 ". Expected TEXT"
                 );
             }
+
+            if (column.getDataTypes() == DbDataTypes.STRING && !(value instanceof String)) {
+                throw new RuntimeException(
+                        "Invalid type for column " + column.getName() +
+                                ". Expected STRING"
+                );
+            }
         }
 }
 

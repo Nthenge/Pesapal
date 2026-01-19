@@ -1,8 +1,8 @@
 package com.challenge.Pesapal.db.sql;
 
-import com.challenge.Pesapal.db.core.Column;
-import com.challenge.Pesapal.db.core.DbDataTypes;
+import com.challenge.Pesapal.db.core.*;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +10,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SqlParser {
+
+    private final Database database;
+
+    public SqlParser(Database database) {
+        this.database = database;
+    }
 
     public SqlCommand parse(String sql) {
         sql = sql.trim();
@@ -92,12 +98,21 @@ public class SqlParser {
         String[] rawValues = valuesPart.split(",");
         List<Object> values = new ArrayList<>();
 
-        for (String raw : rawValues) {
-            raw = raw.trim();
-            if (raw.startsWith("'") && raw.endsWith("'")) {
-                values.add(raw.substring(1, raw.length() - 1));
+
+        Table table = this.database.getTable(tableName); // your Database instance
+        List<Column> columns = table.getColumns();
+
+        for (int i = 0; i < columns.size(); i++) {
+            Column col = columns.get(i);
+
+            if (i < rawValues.length && !rawValues[i].trim().isEmpty()) {
+                String raw = rawValues[i].trim();
+                values.add(raw.startsWith("'") && raw.endsWith("'") ? raw.substring(1, raw.length() - 1) : Integer.parseInt(raw));
+            } else if (col.isPrimaryKey()) {
+                // Auto-generate primary key
+                values.add(table.getNextId(col.getName()));
             } else {
-                values.add(Integer.parseInt(raw));
+                values.add(null);
             }
         }
 

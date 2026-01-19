@@ -16,7 +16,7 @@ public class DbRepl {
 
         Database database = new Database();
         QueryExecutor executor = new QueryExecutor(database);
-        SqlParser parser = new SqlParser();
+        SqlParser parser = new SqlParser(database);
 
         Scanner scanner = new Scanner(System.in);
 

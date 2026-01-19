@@ -13,7 +13,7 @@ public class DatabaseService {
 
     public DatabaseService(DatabaseHolder holder) {
         this.executor = new QueryExecutor(holder.getDatabase());
-        this.parser = new SqlParser();
+        this.parser = new SqlParser(holder.getDatabase());
     }
 
     public Object executeSql(String sql) {

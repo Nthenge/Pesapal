@@ -9,6 +9,8 @@ public class Table {
     private final List<Row> rows = new ArrayList<>();
 
     private final Map<String, Map<Object, Row>> indexes = new HashMap<>();
+    private final Map<String, Integer> lastIds = new HashMap<>();
+
 
     public Table(String name, List<Column> columns) {
         this.name = name;
@@ -17,6 +19,9 @@ public class Table {
         for (Column column : columns){
             if (column.isPrimaryKey() || column.isUnique()){
                 indexes.put(column.getName(), new HashMap<>());
+            }
+            if (column.isPrimaryKey()) {
+                lastIds.put(column.getName(), 0); // start auto-increment from 1
             }
         }
     }
@@ -38,6 +43,15 @@ public class Table {
         for (Map.Entry<String, Map<Object, Row>> entry : indexes.entrySet()) {
             entry.getValue().put(row.get(entry.getKey()), row);
         }
+    }
+
+    public int getNextId(String primaryKeyColumn) {
+        if (!lastIds.containsKey(primaryKeyColumn)) {
+            throw new RuntimeException("Column is not a primary key: " + primaryKeyColumn);
+        }
+        int next = lastIds.get(primaryKeyColumn) + 1;
+        lastIds.put(primaryKeyColumn, next);
+        return next;
     }
 
     public List<Row> getRows() {
