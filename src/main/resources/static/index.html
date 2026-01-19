@@ -139,7 +139,8 @@
     <div class="left-panel">
         <header>
             <h1>Pesapal RDBMS Challenge</h1>
-            <p class="subtitle">Java custom-built relational database engine supporting SQL operations </p>
+            <h5>Hosted here: <a href="https://pesapal-jldq.onrender.com/" target="_blank">Pesapal Challenge</a></h5>
+            <p class="subtitle">Java custom-built relational database engine supporting SQL operations <br> See <strong>usage</strong> on your right for sample</p>
 
             <div class="author">
                 <div><strong>Name: </strong> Abraham Nthenge Mutinda</div>
@@ -185,8 +186,7 @@
         <ul>
             <li>Frontend: HTML, CSS, JavaScript</li>
             <li>Backend: Java, Spring boot</li>
-            <li>Database: SQL</li>
-            <li>AJAX Fetch API for real-time query execution</li>
+            <li>Database: In memory</li>
         </ul>
 
         <h3>Setup & Installation</h3>
@@ -195,6 +195,14 @@
             <li>Open it with IntelliJ: <code>IDEA</code></li>
             <li>Run maven install for dependencies: <code>maven install</code></li>
             <li>Open your browser at <code>http://localhost:8080/index.html</code></li>
+            <li><dt>or Use Docker</dt> <br>
+                <dd>
+                    docker build -t pesapal-rdbms .
+                </dd>
+                <dd>
+                    docker run -p 8080:8080 pesapal-rdbms
+                </dd>
+            </li>
         </ul>
 
         <h3>Usage</h3>
@@ -203,6 +211,27 @@
             <li>Click "Execute" to run the query.</li>
             <li>Results will appear below the input box in a table.</li>
             <li>Last accessed table is remembered for data-modifying commands.</li>
+            <li>
+                <dt>eg.</dt>
+                <dd>Create Table<br>
+                    CREATE TABLE users (id INT PRIMARY KEY, name TEXT) <br><br>
+
+                    Insert Data (auto-increment ID)<br>
+                    INSERT INTO users VALUES (, 'Alice') INSERT INTO users VALUES (, 'Bob')<br><br>
+
+                    Select Data<br>
+                    SELECT * FROM users SELECT * FROM users WHERE id = 1<br><br>
+
+                    Update Data<br>
+                    UPDATE users SET name = 'Mike' WHERE id = 1<br><br>
+
+                    Delete Data<br>
+                    DELETE FROM users WHERE id = 2<br><br>
+
+                    Join Query<br>
+                    SELECT * FROM orders JOIN users ON orders.user_id = users.id</dd><br>
+            </li>
+
         </ul>
 
         <h3>Project Structure</h3>
