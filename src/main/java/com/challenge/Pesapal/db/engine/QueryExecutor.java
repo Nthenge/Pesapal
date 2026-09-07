@@ -82,11 +82,7 @@ public class QueryExecutor {
                 .filter(row -> command.getWhereValue().equals(row.get(command.getWhereColumn())))
                 .collect(Collectors.toList());
 
-        for (Row row : toDelete) {
-            table.removeFromIndexes(row);
-        }
-
-        table.getRows().removeAll(toDelete);
+        table.removeRows(toDelete);
 
         return toDelete.size() + " row(s) deleted";
     }

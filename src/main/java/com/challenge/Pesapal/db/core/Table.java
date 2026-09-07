@@ -26,7 +26,7 @@ public class Table {
         }
     }
 
-    public void insert(Row row) {
+    public synchronized void insert(Row row) {
         for (Map.Entry<String, Map<Object, Row>> entry : indexes.entrySet()) {
             String columnName = entry.getKey();
             Object value = row.get(columnName);
@@ -45,7 +45,7 @@ public class Table {
         }
     }
 
-    public int getNextId(String primaryKeyColumn) {
+    public synchronized int getNextId(String primaryKeyColumn) {
         if (!lastIds.containsKey(primaryKeyColumn)) {
             throw new RuntimeException("Column is not a primary key: " + primaryKeyColumn);
         }
@@ -54,7 +54,7 @@ public class Table {
         return next;
     }
 
-    public void updateIndex(String columnName, Object oldValue, Object newValue, Row row) {
+    public synchronized void updateIndex(String columnName, Object oldValue, Object newValue, Row row) {
         Map<Object, Row> index = indexes.get(columnName);
         if (index == null) return;
 
@@ -66,14 +66,21 @@ public class Table {
         index.put(newValue, row);
     }
 
-    public void removeFromIndexes(Row row) {
+    public synchronized void removeFromIndexes(Row row) {
         for (Map.Entry<String, Map<Object, Row>> entry : indexes.entrySet()) {
             entry.getValue().remove(row.get(entry.getKey()));
         }
     }
 
-    public List<Row> getRows() {
-        return rows;
+    public synchronized void removeRows(List<Row> toRemove) {
+        for (Row row : toRemove) {
+            removeFromIndexes(row);
+        }
+        rows.removeAll(toRemove);
+    }
+
+    public synchronized List<Row> getRows() {
+        return new ArrayList<>(rows);
     }
 
     public String getName() {
@@ -84,7 +91,7 @@ public class Table {
         return columns;
     }
 
-    public Optional<Row> findByIndexedColumn(String columnName, Object value) {
+    public synchronized Optional<Row> findByIndexedColumn(String columnName, Object value) {
         if (!indexes.containsKey(columnName)) {
             return Optional.empty();
         }

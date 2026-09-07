@@ -1,17 +1,17 @@
 package com.challenge.Pesapal.db.core;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Database {
 
-    private final Map<String, Table> tables = new HashMap<>();
+    private final Map<String, Table> tables = new ConcurrentHashMap<>();
 
     public void createTable(Table table) {
-        if (tables.containsKey(table.getName())) {
+        Table existing = tables.putIfAbsent(table.getName(), table);
+        if (existing != null) {
             throw new RuntimeException("Table already exists: " + table.getName());
         }
-        tables.put(table.getName(), table);
     }
 
     public Table getTable(String tableName) {
