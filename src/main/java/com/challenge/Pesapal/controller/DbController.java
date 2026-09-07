@@ -1,10 +1,8 @@
 package com.challenge.Pesapal.controller;
 
 import com.challenge.Pesapal.service.DatabaseService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/db")
@@ -19,6 +17,11 @@ public class DbController {
     @PostMapping("/execute")
     public Object execute(@RequestBody String sql) {
         return service.executeSql(sql);
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("UP");
     }
 }
 
