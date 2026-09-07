@@ -54,6 +54,24 @@ public class Table {
         return next;
     }
 
+    public void updateIndex(String columnName, Object oldValue, Object newValue, Row row) {
+        Map<Object, Row> index = indexes.get(columnName);
+        if (index == null) return;
+
+        if (newValue != null && index.containsKey(newValue) && index.get(newValue) != row) {
+            throw new RuntimeException("Duplicate value for unique column: " + columnName);
+        }
+
+        index.remove(oldValue);
+        index.put(newValue, row);
+    }
+
+    public void removeFromIndexes(Row row) {
+        for (Map.Entry<String, Map<Object, Row>> entry : indexes.entrySet()) {
+            entry.getValue().remove(row.get(entry.getKey()));
+        }
+    }
+
     public List<Row> getRows() {
         return rows;
     }

@@ -78,16 +78,17 @@ public class QueryExecutor {
 
         Table table = database.getTable(command.getTableName());
 
-        int before = table.getRows().size();
+        List<Row> toDelete = table.getRows().stream()
+                .filter(row -> command.getWhereValue().equals(row.get(command.getWhereColumn())))
+                .collect(Collectors.toList());
 
-        table.getRows().removeIf(row ->
-                row.get(command.getWhereColumn())
-                        .equals(command.getWhereValue())
-        );
+        for (Row row : toDelete) {
+            table.removeFromIndexes(row);
+        }
 
-        int after = table.getRows().size();
+        table.getRows().removeAll(toDelete);
 
-        return (before - after) + " row(s) deleted";
+        return toDelete.size() + " row(s) deleted";
     }
 
     private Object executeUpdate(UpdateCommand command) {
@@ -96,11 +97,12 @@ public class QueryExecutor {
         int count = 0;
 
         for (Row row : table.getRows()) {
-            if (row.get(command.getWhereColumn())
-                    .equals(command.getWhereValue())) {
+            if (command.getWhereValue().equals(row.get(command.getWhereColumn()))) {
 
                 for (var entry : command.getNewValues().entrySet()) {
+                    Object oldValue = row.get(entry.getKey());
                     row.set(entry.getKey(), entry.getValue());
+                    table.updateIndex(entry.getKey(), oldValue, entry.getValue(), row);
                 }
                 count++;
             }
@@ -165,6 +167,10 @@ public class QueryExecutor {
         }
 
         private void validateType(Column column, Object value) {
+
+            if (value == null) {
+                return; // no value supplied — allowed for non-primary-key columns
+            }
 
             if (column.getDataTypes() == DbDataTypes.INT && !(value instanceof Integer)) {
                 throw new RuntimeException(
